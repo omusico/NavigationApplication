@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         //init map
-        mMapFragment = MapFragment.newInstance("init", "init");
+        mMapFragment = MapFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.activity_main_map, mMapFragment).commit();
     }

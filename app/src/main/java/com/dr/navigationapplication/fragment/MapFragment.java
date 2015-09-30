@@ -1,14 +1,29 @@
 package com.dr.navigationapplication.fragment;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.model.LatLng;
 import com.dr.navigationapplication.R;
+import com.dr.navigationapplication.dao.PlaceTable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,15 +33,26 @@ import com.dr.navigationapplication.R;
  * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListener{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG = "MapFragment";
+
+    private Context mContext;
+    public MapView mapView; //百度xml  mapview
+    private BaiduMap baiduMap;//百度地图实例
+
+    private boolean isFirstLoc = true; // 是否定位
+    private double latitude; //城市中心经度
+    private double longitude;//城市中心维度
+    private String currentCity;//当前城市
+    private String selectCity;//选中城市
+    private Map<LatLng, PlaceTable> map = new HashMap<>();
+    private Map<Marker, PlaceTable> mapMarker = new HashMap<>();
+    private InfoWindow infoWindow;
+    private Handler handler;
+    private Fragment fragment;
+
+    private boolean locationFlag;
 
     private OnFragmentInteractionListener mListener;
 
@@ -34,16 +60,11 @@ public class MapFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment MapFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String param1, String param2) {
+    public static MapFragment newInstance() {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,19 +77,20 @@ public class MapFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_map, null, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     * Rename method, update argument and hook method into UI event
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -93,6 +115,34 @@ public class MapFragment extends Fragment {
     }
 
     /**
+     * baidu map mark click
+     * @param marker
+     * @return
+     */
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        PlaceTable data = null;
+        if ((data = mapMarker.get(marker)) != null) {
+            TextView textView = new TextView(mContext);
+            textView.setBackgroundColor(Color.CYAN);
+            textView.setTextColor(mContext.getResources().getColor(R.color.turquoise));
+            textView.setText(data.getName());
+            ImageView imageView = new ImageView(mContext);
+            //Todo:异步加载图片待写
+            final LinearLayout layout = new LinearLayout(mContext);
+            layout.addView(imageView, 160, 160);
+            layout.addView(textView);
+            infoWindow = new InfoWindow(layout, marker.getPosition(), -94);
+            baiduMap.showInfoWindow(infoWindow);
+            Log.e(TAG, "程序OK");
+
+        } else {
+            Log.e(TAG, "程序逻辑出错");
+        }
+        return true;
+    }
+
+    /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -103,7 +153,6 @@ public class MapFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 

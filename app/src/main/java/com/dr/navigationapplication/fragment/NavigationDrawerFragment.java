@@ -30,6 +30,7 @@ import com.dr.navigationapplication.R;
  */
 public class NavigationDrawerFragment extends Fragment {
 
+    private static final String TAG = "NavigationDrawerFragment";
     /**
      * Remember the position of the selected item.
      */
