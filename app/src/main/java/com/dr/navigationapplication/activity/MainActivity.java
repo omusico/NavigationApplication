@@ -1,6 +1,8 @@
 package com.dr.navigationapplication.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,15 +10,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dr.navigationapplication.R;
+import com.dr.navigationapplication.fragment.MapFragment;
 import com.dr.navigationapplication.fragment.NavigationDrawerFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, MapFragment.OnFragmentInteractionListener {
+
+    private static final String TAG = "MainActivity";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    /**
+     * Fragment managing the behaviors, interactions and presentation of the map.
+     */
+    private MapFragment mMapFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -36,10 +46,27 @@ public class MainActivity extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        //init map
+        mMapFragment = MapFragment.newInstance("init", "init");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.activity_main_map, mMapFragment).commit();
     }
 
+    /**
+     * 监听城市导航事件
+     * @param position
+     */
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+
+    }
+
+    /**
+     * 地图响应事件
+     * @param uri
+     */
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 
@@ -73,8 +100,6 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
-
         return super.onOptionsItemSelected(item);
     }
 }

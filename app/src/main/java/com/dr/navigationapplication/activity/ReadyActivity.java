@@ -6,17 +6,27 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.dr.navigationapplication.R;
 import com.dr.navigationapplication.costant_interface.Constant;
 
 public class ReadyActivity extends Activity {
 
-    private Handler handler;
+    private static final String TAG = "ReadyActivity";
+
+    //延时 handler
+    private static Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //百度地图SDK初始化 必须在 setContentView 之前
+        SDKInitializer.initialize(getApplicationContext());
+
         setContentView(R.layout.activity_ready);
+
+
 
         handler = new Handler() {
             @Override
@@ -34,7 +44,16 @@ public class ReadyActivity extends Activity {
         };
 
         handler.sendEmptyMessageDelayed(Constant.READY_GO, 2000);
+    }
 
+
+    /**
+     * 主进程的handler
+     * @return Handler
+     */
+    public static Handler getHandler(){
+        if(handler != null) return handler;
+        else return null;
     }
 
 }
