@@ -1,11 +1,9 @@
 package com.dr.abcd.dao;
 
 import com.dr.navigationapplication.dao.InfoBaseTable;
-
 /**
- * Created by only乐秘 on 2015-09-20.
- *
- * nodes_contract表
+ * Created by 董神 on 2015/9/28.
+ * I love programming
  */
 public class NodesContact extends InfoBaseTable {
 

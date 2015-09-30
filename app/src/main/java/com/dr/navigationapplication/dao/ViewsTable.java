@@ -1,9 +1,8 @@
 package com.dr.navigationapplication.dao;
 
 /**
- * Created by only乐秘 on 2015-09-20.
- *
- * views表
+ * Created by 董神 on 2015/9/28.
+ * I love programming
  */
 public class ViewsTable extends InfoBaseTable {
 
