@@ -31,6 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.EveryPartActivity"
+            android:label="@string/title_activity_every_part"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.dr.navigationapplication.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dr.navigationapplication.R;
+import com.dr.navigationapplication.activity.EveryPartActivity;
 import com.dr.navigationapplication.dao.PlaceTable;
 import com.dr.navigationapplication.dao.daoimpl.Data;
 import com.dr.navigationapplication.listViewAnimation.ScaleInAnimationAdapter;
@@ -61,14 +63,14 @@ public class FindFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*Intent intent = new Intent(getActivity(), EveryPartActivity.class);
+                Intent intent = new Intent(getActivity(), EveryPartActivity.class);
                 int pid = myAdapter.placeTables.get(position).getId();
                 String s = myAdapter.placeTables.get(position).getImage();
                 intent.putExtra("PlaceID", pid);
                 intent.putExtra("MainPlace", s);
                 intent.putExtra("name",myAdapter.placeTables.get(position).getName());
                 intent.putExtra("intro", myAdapter.placeTables.get(position).getIntro());
-                startActivity(intent);*/
+                startActivity(intent);
             }
         });
     }
