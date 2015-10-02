@@ -229,4 +229,24 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
 
     }
+
+    @Override
+    public void onPause() {
+        mapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        mapView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        search.destroy();
+        baiduMap = null;
+        mapView.onDestroy();
+        super.onDestroy();
+    }
 }
