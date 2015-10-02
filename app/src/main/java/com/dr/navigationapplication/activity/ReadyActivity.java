@@ -28,8 +28,6 @@ public class ReadyActivity extends Activity {
 
     private static final String TAG = "ReadyActivity";
 
-    //lalalalla
-
     //延时 handler
     public static Handler handler;
 
