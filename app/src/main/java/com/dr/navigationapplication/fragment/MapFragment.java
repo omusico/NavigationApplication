@@ -114,7 +114,6 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
     private void initPlace() {
         int cid = Data.getCityId(currentCity);
         for (PlaceTable placeTable : Data.placeTableList) {
-            Log.i(TAG, placeTable.getCid() + " == " + cid);
             if (placeTable.getCid() == cid) {
                 LatLng latLng = new LatLng(placeTable.getLat(), placeTable.getLng());
                 OverlayOptions options = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory

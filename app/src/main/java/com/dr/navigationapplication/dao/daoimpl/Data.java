@@ -1,7 +1,5 @@
 package com.dr.navigationapplication.dao.daoimpl;
 
-import android.util.Log;
-
 import com.dr.navigationapplication.dao.ActivityTable;
 import com.dr.navigationapplication.dao.CityTable;
 import com.dr.navigationapplication.dao.FloorPlanTable;
@@ -10,7 +8,6 @@ import com.dr.navigationapplication.dao.NodesContact;
 import com.dr.navigationapplication.dao.NodesTable;
 import com.dr.navigationapplication.dao.PlaceTable;
 import com.dr.navigationapplication.dao.ViewsTable;
-import com.dr.navigationapplication.fragment.MapFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +49,6 @@ public class Data {
         int id = -1;
         if (cityTableList != null) {
             for (CityTable cityTable : cityTableList) {
-                Log.i(MapFragment.TAG, cityTable.getName() + " == " + city);
                 if (cityTable.getName().equals(city)) {
                     id = cityTable.getId();
                 }
