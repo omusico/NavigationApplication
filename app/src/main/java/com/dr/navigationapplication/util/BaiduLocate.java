@@ -25,7 +25,7 @@ public class BaiduLocate implements BDLocationListener, OnGetGeoCoderResultListe
     private static Context mContext;
     private boolean isLoc = true; // 是否定位
     private LocationClient mClient;//百度定位执行器
-    public static  double latitude; //纬度
+    public static double latitude; //纬度
     public static double longitude;//经度
     private String currentCity;//当前城市
     public static String currentStaticCity;//静态的方便其他模块调用
@@ -83,7 +83,7 @@ public class BaiduLocate implements BDLocationListener, OnGetGeoCoderResultListe
         Log.i(TAG, "定位监听运行到此处" + isLoc);
         if (isLoc) {
             try {
-                currentCity = location.getCity();
+                currentCity = location.getCity().substring(0, location.getCity().length() - 1);
                 search(currentCity, currentCity);
             } catch (Exception e) {
                 e.printStackTrace();

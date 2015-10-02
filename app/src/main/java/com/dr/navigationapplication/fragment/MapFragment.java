@@ -12,13 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -27,6 +31,7 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.dr.navigationapplication.R;
 import com.dr.navigationapplication.dao.PlaceTable;
+import com.dr.navigationapplication.dao.daoimpl.Data;
 import com.dr.navigationapplication.util.BaiduLocate;
 
 import java.util.HashMap;
@@ -40,9 +45,9 @@ import java.util.Map;
  * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListener , OnGetGeoCoderResultListener {
+public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListener, OnGetGeoCoderResultListener {
 
-    private static final String TAG = "MapFragment";
+    public static final String TAG = "MapFragment";
 
     private Context mContext;
     public MapView mapView; //百度xml  mapview
@@ -88,13 +93,18 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_map, null, false);
-        mapView = (MapView)view.findViewById(R.id.bmapView);
+        mapView = (MapView) view.findViewById(R.id.bmapView);
+        mapView.showZoomControls(false);
         baiduMap = mapView.getMap();
         baiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);//设置地图类型
+        baiduMap.setOnMarkerClickListener(this);
         search = GeoCoder.newInstance();//初始化搜索
         search.setOnGetGeoCodeResultListener(this);//设置搜索监听
-        initLocation();
-        initPlace();
+        if (initLocation()) {
+            initPlace();
+        }else {
+            Toast.makeText(mContext, "初始化定位失败， 请手动选择城市 ", Toast.LENGTH_LONG).show();
+        }
         return view;
     }
 
@@ -102,22 +112,33 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
      * 初始化地图上的景点
      */
     private void initPlace() {
-
-
-
+        int cid = Data.getCityId(currentCity);
+        for (PlaceTable placeTable : Data.placeTableList) {
+            Log.i(TAG, placeTable.getCid() + " == " + cid);
+            if (placeTable.getCid() == cid) {
+                LatLng latLng = new LatLng(placeTable.getLat(), placeTable.getLng());
+                OverlayOptions options = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory
+                        .fromResource(R.mipmap.position_buildingtwo));
+                Marker marker = (Marker) baiduMap.addOverlay(options);
+                mapMarker.put(marker, placeTable);
+                Log.i(TAG, "palcetable :  " + placeTable.toString());
+            }
+        }
     }
 
     /**
      * 初始化地图中心
      */
-    private void initLocation() {
+    private boolean initLocation() {
         if (BaiduLocate.getCurrentCity() != null) {
             //更新地图中心
+            currentCity = BaiduLocate.getCurrentCity();
             Log.i(TAG, "map init location success");
             baiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(new LatLng(BaiduLocate.latitude, BaiduLocate.longitude)));
-        }
-        else {
+            return true;
+        } else {
             Log.i(TAG, "init location faile");
+            return false;
         }
     }
 
@@ -194,6 +215,7 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
 
     /**
      * update map through number data
+     *
      * @param latLng
      */
     public void updateMap(LatLng latLng) {
@@ -203,20 +225,23 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
 
     /**
      * update map through address
-     * @param city city
+     *
+     * @param city    city
      * @param address address int the city
      */
     public void updateMap(String city, String address) {
+        this.currentCity = city;
         search.geocode(new GeoCodeOption().city(city).address(address));
     }
 
     /**
      * baidu map search + result
+     *
      * @param result result
      */
     @Override
     public void onGetGeoCodeResult(GeoCodeResult result) {
-        if(result != null) {
+        if (result != null) {
             Log.i(TAG, "map start again locate");
             MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(result.getLocation());
             baiduMap.animateMapStatus(u);
@@ -225,6 +250,7 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
 
     /**
      * baidu map search - result
+     *
      * @param result result
      */
     @Override

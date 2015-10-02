@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity
 
         if (BaiduLocate.getCurrentCity() != null) {
             mTitle = BaiduLocate.getCurrentCity();
-            mTitle = (String) mTitle.subSequence(0, (mTitle.length() - 1));
             for (int i = 0; i < Data.cityTableList.size(); i++) {
                 Log.i(TAG, mTitle + "==" + Data.cityTableList.get(i).getName());
                 if (mTitle.equals(Data.cityTableList.get(i).getName())) {
