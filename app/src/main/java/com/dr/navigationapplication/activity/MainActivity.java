@@ -6,12 +6,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dr.navigationapplication.R;
+import com.dr.navigationapplication.dao.daoimpl.Data;
+import com.dr.navigationapplication.fragment.FindFragment;
 import com.dr.navigationapplication.fragment.MapFragment;
 import com.dr.navigationapplication.fragment.NavigationDrawerFragment;
+import com.dr.navigationapplication.util.BaiduLocate;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, MapFragment.OnFragmentInteractionListener {
@@ -27,6 +31,10 @@ public class MainActivity extends AppCompatActivity
      * Fragment managing the behaviors, interactions and presentation of the map.
      */
     private MapFragment mMapFragment;
+    /**
+     * fragment managing the
+     */
+    private FindFragment findFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -40,7 +48,6 @@ public class MainActivity extends AppCompatActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -50,19 +57,55 @@ public class MainActivity extends AppCompatActivity
         mMapFragment = MapFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.activity_main_map, mMapFragment).commit();
+
+        findFragment = (FindFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_find);
+        findFragment.setHandler(ReadyActivity.handler);
+
+        if (BaiduLocate.getCurrentCity() != null) {
+            mTitle = BaiduLocate.getCurrentCity();
+            mTitle = (String) mTitle.subSequence(0, (mTitle.length() - 1));
+            for (int i = 0; i < Data.cityTableList.size(); i++) {
+                Log.i(TAG, mTitle + "==" + Data.cityTableList.get(i).getName());
+                if (mTitle.equals(Data.cityTableList.get(i).getName())) {
+                    findFragment.setCityID(Data.cityTableList.get(i).getId());
+                    Log.i(TAG, "开始更新");
+                    findFragment.upDate();
+                    break;
+                }
+            }
+        } else {
+            mTitle = getTitle();
+        }
     }
 
     /**
      * 监听城市导航事件
+     *
      * @param position
      */
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-
+        String city = "";
+        if (Data.getOnlyCity() != null && mMapFragment != null) {
+            city = Data.getOnlyCity().get(position);
+            Log.i(this.TAG, "select of city : " + city);
+            mMapFragment.updateMap(city, city);
+            mTitle = city;
+            for (int i = 0; i < Data.cityTableList.size(); i++) {
+                Log.i(TAG, city + "==" + Data.cityTableList.get(i).getName());
+                if (city.equals(Data.cityTableList.get(i).getName())) {
+                    findFragment.setCityID(Data.cityTableList.get(i).getId());
+                    Log.i(TAG, "开始更新");
+                    findFragment.upDate();
+                    break;
+                }
+            }
+        }
     }
 
     /**
      * 地图响应事件
+     *
      * @param uri
      */
     @Override
@@ -70,13 +113,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void onSectionAttached(int number) {
-
-    }
-
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        if (actionBar != null) actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }

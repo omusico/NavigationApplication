@@ -1,6 +1,4 @@
-package com.dr.abcd.dao;
-
-import com.dr.navigationapplication.dao.InfoBaseTable;
+package com.dr.navigationapplication.dao;
 
 /**
  * Created by 董神 on 2015/9/28.

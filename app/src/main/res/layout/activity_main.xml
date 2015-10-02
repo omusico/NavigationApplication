@@ -10,7 +10,7 @@
         android:id="@+id/activity_main_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_map"/>
+        tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/navigation_drawer"
@@ -19,5 +19,13 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         tools:layout="@layout/fragment_navigation_drawer" />
+
+    <fragment
+        android:id="@+id/navigation_drawer_find"
+        android:name="com.dr.navigationapplication.fragment.FindFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        tools:layout="@layout/fragment_find" />
 
 </android.support.v4.widget.DrawerLayout>

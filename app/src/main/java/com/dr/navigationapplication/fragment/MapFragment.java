@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,11 +15,19 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.dr.navigationapplication.R;
 import com.dr.navigationapplication.dao.PlaceTable;
+import com.dr.navigationapplication.util.BaiduLocate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,14 +40,14 @@ import java.util.Map;
  * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListener{
+public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListener , OnGetGeoCoderResultListener {
 
     private static final String TAG = "MapFragment";
 
     private Context mContext;
     public MapView mapView; //百度xml  mapview
     private BaiduMap baiduMap;//百度地图实例
-
+    private GeoCoder search;
     private boolean isFirstLoc = true; // 是否定位
     private double latitude; //城市中心经度
     private double longitude;//城市中心维度
@@ -49,10 +56,6 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
     private Map<LatLng, PlaceTable> map = new HashMap<>();
     private Map<Marker, PlaceTable> mapMarker = new HashMap<>();
     private InfoWindow infoWindow;
-    private Handler handler;
-    private Fragment fragment;
-
-    private boolean locationFlag;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,12 +87,42 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_map, null, false);
+        View view = inflater.inflate(R.layout.fragment_map, null, false);
+        mapView = (MapView)view.findViewById(R.id.bmapView);
+        baiduMap = mapView.getMap();
+        baiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);//设置地图类型
+        search = GeoCoder.newInstance();//初始化搜索
+        search.setOnGetGeoCodeResultListener(this);//设置搜索监听
+        initLocation();
+        initPlace();
+        return view;
+    }
+
+    /**
+     * 初始化地图上的景点
+     */
+    private void initPlace() {
+
+    }
+
+    /**
+     * 初始化地图中心
+     */
+    private void initLocation() {
+        if (BaiduLocate.getCurrentCity() != null) {
+            //更新地图中心
+            Log.i(TAG, "map init location success");
+            baiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(new LatLng(BaiduLocate.latitude, BaiduLocate.longitude)));
+        }
+        else {
+            Log.i(TAG, "init location faile");
+        }
     }
 
     /**
      * Rename method, update argument and hook method into UI event
-     * @param uri
+     *
+     * @param uri 待定
      */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -116,12 +149,13 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
 
     /**
      * baidu map mark click
-     * @param marker
-     * @return
+     *
+     * @param marker 自定义地图上的点
+     * @return flag
      */
     @Override
     public boolean onMarkerClick(Marker marker) {
-        PlaceTable data = null;
+        PlaceTable data;
         if ((data = mapMarker.get(marker)) != null) {
             TextView textView = new TextView(mContext);
             textView.setBackgroundColor(Color.CYAN);
@@ -153,7 +187,46 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * update map through number data
+     * @param latLng
+     */
+    public void updateMap(LatLng latLng) {
+        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
+        baiduMap.animateMapStatus(u);
+    }
+
+    /**
+     * update map through address
+     * @param city city
+     * @param address address int the city
+     */
+    public void updateMap(String city, String address) {
+        search.geocode(new GeoCodeOption().city(city).address(address));
+    }
+
+    /**
+     * baidu map search + result
+     * @param result result
+     */
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult result) {
+        if(result != null) {
+            Log.i(TAG, "map start again locate");
+            MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(result.getLocation());
+            baiduMap.animateMapStatus(u);
+        }
+    }
+
+    /**
+     * baidu map search - result
+     * @param result result
+     */
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+
+    }
 }
