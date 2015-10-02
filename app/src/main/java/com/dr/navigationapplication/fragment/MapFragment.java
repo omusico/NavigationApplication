@@ -103,6 +103,8 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
      */
     private void initPlace() {
 
+
+
     }
 
     /**
