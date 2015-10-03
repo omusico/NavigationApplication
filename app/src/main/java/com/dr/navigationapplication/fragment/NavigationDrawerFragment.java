@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,16 +20,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.dr.navigationapplication.R;
 import com.dr.navigationapplication.dao.daoimpl.Data;
+
+import java.util.ArrayList;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private static final String TAG = "NavigationDrawerFragment";
     /**
@@ -60,6 +63,11 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+    private ArrayAdapter<String> listAdapter;
+    private ArrayList<String> list;
+    private ArrayList<String> showlist;
+    private boolean issearch;
 
     public NavigationDrawerFragment() {
     }
@@ -92,8 +100,9 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
+        View view = (View) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+
+        mDrawerListView = (ListView) view.findViewById(R.id.mylist);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -101,13 +110,18 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        list = (ArrayList)Data.getOnlyCity();
+        listAdapter = new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
+                R.layout.list_navigation,
                 android.R.id.text1,
-                Data.getOnlyCity()));
+                list);
+        mDrawerListView.setAdapter(listAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+
+        SearchView searchview = (SearchView) view.findViewById(R.id.searchView);
+        searchview.setOnQueryTextListener(this);
+        return view;
     }
 
     public boolean isDrawerOpen() {
@@ -272,5 +286,26 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        showlist = new ArrayList<>(); //搜索建议显示列表
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).startsWith(newText))  //如果list中包含以newText开头的字符串，则将它放入showlist
+            {
+                showlist.add(list.get(i));
+            }
+        }
+        listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.list_navigation, showlist);//创建适配器与数据源showlist绑定
+        mDrawerListView.setAdapter(listAdapter);
+        issearch = true;
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 }
