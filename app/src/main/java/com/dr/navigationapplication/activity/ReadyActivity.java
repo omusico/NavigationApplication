@@ -3,6 +3,7 @@ package com.dr.navigationapplication.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -18,11 +19,17 @@ import com.dr.navigationapplication.dao.NodesTable;
 import com.dr.navigationapplication.dao.PlaceTable;
 import com.dr.navigationapplication.dao.ViewsTable;
 import com.dr.navigationapplication.dao.daoimpl.Data;
+import com.dr.navigationapplication.util.AsyncImageLoader;
 import com.dr.navigationapplication.util.BaiduLocate;
+import com.dr.navigationapplication.util.DiskLruCache;
 import com.dr.navigationapplication.util.JSONHttp;
+import com.dr.navigationapplication.util.NetworkJudge;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ReadyActivity extends Activity {
 
@@ -54,8 +61,30 @@ public class ReadyActivity extends Activity {
 
         setContentView(R.layout.activity_ready);
 
-        //所有JSON解析
+        //由于数据比较少，直接解析所有JSON数据 存到本地
         JSONParse();
+
+        //判断是否删除缓存
+        if (NetworkJudge.isWifiEnabled(getApplicationContext())) {
+            try {
+                String cachePath;
+                if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                        || !Environment.isExternalStorageRemovable()) {
+                    cachePath = getApplicationContext().getExternalCacheDir().getPath();
+                } else {
+                    cachePath = getApplicationContext().getCacheDir().getPath();
+                }
+                File cacheDir = new File(cachePath + File.separator + "bitmap");
+                Log.i(AsyncImageLoader.TAG, "cache dir :　" + cacheDir);
+                if (cacheDir.exists()) {
+                    DiskLruCache.deleteContents(cacheDir);
+                    Log.i(AsyncImageLoader.TAG, "cache dir :　" + cacheDir);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
 
         handler = new Handler() {
             @Override
