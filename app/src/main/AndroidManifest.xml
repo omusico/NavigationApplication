@@ -34,6 +34,10 @@
         <activity
             android:name=".activity.EveryPartActivity"
             android:label="@string/title_activity_every_part"></activity>
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
     </application>
 
 </manifest>

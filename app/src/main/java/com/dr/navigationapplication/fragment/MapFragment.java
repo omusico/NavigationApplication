@@ -85,6 +85,7 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mContext = getActivity();
         }
     }
 
