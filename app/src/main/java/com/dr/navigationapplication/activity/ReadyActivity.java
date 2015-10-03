@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 public class ReadyActivity extends Activity {
 
-    private static final String TAG = "ReadyActivity";
+    private static final String TAG = "ReadyActivity:";
 
     //延时 handler
     public static Handler handler;
