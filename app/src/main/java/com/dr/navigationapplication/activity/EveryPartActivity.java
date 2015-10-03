@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.dr.navigationapplication.R;
@@ -17,6 +20,9 @@ import com.dr.navigationapplication.dao.daoimpl.Data;
 import com.dr.navigationapplication.util.PlacePhotoDownloadTask;
 
 
+/**
+ * @author 董神
+ */
 public class EveryPartActivity extends Activity {
 
     private static final String TAG = "EveryPartActivity";
@@ -30,6 +36,7 @@ public class EveryPartActivity extends Activity {
     private EveryPartAdapter adapter;
     private int pid;
     private String imageUrl;
+    private CheckBox checkbox;
 
     public EveryPartActivity() {
 
@@ -58,6 +65,25 @@ public class EveryPartActivity extends Activity {
         new PlacePhotoDownloadTask(imageView).execute(imageUrl);
         this.initAdapter();
         gridView.setAdapter(adapter);
+        gridView.post(new Runnable() {
+            @Override
+            public void run() {
+                ((ScrollView) findViewById(R.id.id_scroll)).scrollTo(0, 0);
+
+            }
+        });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                checkbox = (CheckBox) view.findViewById(R.id.id_checkbox);
+                if (!checkbox.isChecked()) {
+                    checkbox.setChecked(true);
+                } else {
+                    checkbox.setChecked(false);
+                }
+            }
+        });
+
         button = (Button) findViewById(R.id.activity_every_part_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,14 +92,14 @@ public class EveryPartActivity extends Activity {
             }
         });
 
-        videoButton = (Button) findViewById(R.id.activity_every_part_video_button);
+        /*videoButton = (Button) findViewById(R.id.activity_every_part_video_button);
         videoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    /*Intent intent = new Intent(EveryPartActivity.this, VitamioActivity.class);
-                    startActivity(intent);*/
+                    *//*Intent intent = new Intent(EveryPartActivity.this, VitamioActivity.class);
+                    startActivity(intent);*//*
             }
-        });
+        });*/
     }
 
     private void initAdapter() {

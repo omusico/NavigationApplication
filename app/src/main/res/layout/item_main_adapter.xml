@@ -3,21 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/aqua">
-    <ImageView
-        android:id="@+id/item_main_adapter_imageview"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:layout_centerHorizontal="true"/>
-
+        android:id="@+id/item_main_adapter_relative_layout">
+        <ImageView
+            android:id="@+id/item_main_adapter_imageview"
+            android:layout_height="180dp"
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:id="@+id/id_checkbox"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:focusable="false" />
+    </RelativeLayout>
     <TextView
-        android:id="@+id/item_main_adapter_textView"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/royalblue"
-        android:layout_below="@id/item_main_adapter_imageview"
-        android:gravity="center_horizontal"
-        android:textSize="16sp"
-        android:layout_marginTop="6dp"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/item_main_adapter_textView"
         android:layout_marginBottom="6dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_marginTop="6dp"
+        android:textSize="16sp"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/item_main_adapter_relative_layout"
+        android:textColor="@color/royalblue"
+        android:text="测试等等"/>
 </RelativeLayout>

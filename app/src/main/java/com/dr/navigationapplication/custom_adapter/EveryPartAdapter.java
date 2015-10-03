@@ -31,7 +31,6 @@ public class EveryPartAdapter extends BaseAdapter {
     }
 
     public EveryPartAdapter() {
-
     }
 
     @Override

@@ -7,32 +7,17 @@
     tools:context="com.dr.abcd.activity.EveryPartActivity">
 
     <ScrollView
+        android:id="@+id/id_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-
-            <Button
-                android:id="@+id/activity_every_part_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="一键导航" />
-
-            <Button
-                android:id="@+id/activity_every_part_video_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/activity_every_part_button"
-                android:text="链接视频" />
-
             <ImageView
                 android:id="@+id/activity_every_part_image_view"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:layout_below="@id/activity_every_part_video_button"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp" />
 
@@ -76,6 +61,13 @@
                 android:verticalSpacing="10dp">
 
             </com.dr.navigationapplication.custom_view.MyGridView>
+            <Button
+                android:id="@+id/activity_every_part_button"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_every_part_grid_view"
+                android:text="一键导航" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
