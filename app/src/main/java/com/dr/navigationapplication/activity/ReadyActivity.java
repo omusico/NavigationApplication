@@ -24,6 +24,9 @@ import com.dr.navigationapplication.util.JSONHttp;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * @author 董睿
+ */
 public class ReadyActivity extends Activity {
 
     private static final String TAG = "ReadyActivity:";
