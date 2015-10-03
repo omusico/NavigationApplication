@@ -25,7 +25,7 @@ import com.dr.navigationapplication.util.PlacePhotoDownloadTask;
  */
 public class EveryPartActivity extends Activity {
 
-    private static final String TAG = "EveryPartActivity";
+    private static final String TAG = "EveryPartActivity:";
     private ImageView imageView;
     private TextView textView;
     private TextView textViewDescription;
