@@ -326,4 +326,7 @@
     <!-- trend -->
     <color name="trend_bottom_bg">#f7f7f7</color>
 
+    <color name="custom_test_one">#6e88e7</color>
+    <color name="custom_test_two">#6e88e7</color>
+
 </resources>

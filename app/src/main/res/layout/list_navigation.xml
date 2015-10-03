@@ -8,5 +8,4 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:textSize="18dp"
     android:textColor="@drawable/itemcolor"
-
     />
