@@ -20,7 +20,7 @@ import com.dr.navigationapplication.util.BaiduLocate;
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, MapFragment.OnFragmentInteractionListener {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivity:";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
