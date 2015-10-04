@@ -11,19 +11,13 @@ import android.util.Log;
 import com.baidu.mapapi.SDKInitializer;
 import com.dr.navigationapplication.R;
 import com.dr.navigationapplication.costant_interface.Constant;
-import com.dr.navigationapplication.dao.ActivityTable;
-import com.dr.navigationapplication.dao.CityTable;
-import com.dr.navigationapplication.dao.FloorPlanTable;
-import com.dr.navigationapplication.dao.NodesContact;
-import com.dr.navigationapplication.dao.NodesTable;
-import com.dr.navigationapplication.dao.PlaceTable;
-import com.dr.navigationapplication.dao.ViewsTable;
-import com.dr.navigationapplication.dao.daoimpl.Data;
+import com.indoor.parse.Data;
 import com.dr.navigationapplication.util.AsyncImageLoader;
 import com.dr.navigationapplication.util.BaiduLocate;
 import com.dr.navigationapplication.util.DiskLruCache;
 import com.dr.navigationapplication.util.JSONHttp;
 import com.dr.navigationapplication.util.NetworkJudge;
+import com.indoor.parse.info.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -252,7 +246,7 @@ public class ReadyActivity extends Activity {
                         floorPlanTable.setVenueid(object.getString("venueid"));
                         floorPlanTable.setFloorid(object.getString("floorid"));
                         floorPlanTable.setFloorplanid(object.getString("floorplanid"));
-                        floorPlanTable.setPid(object.getString("pid"));
+                        floorPlanTable.setPid(object.getInt("pid"));
                         floorPlanTable.setImage(object.getString("image"));
                         floorPlanTable.setFn(object.getInt("fn"));
                         floorPlanTable.setId(object.getInt("id"));
@@ -274,18 +268,18 @@ public class ReadyActivity extends Activity {
                 try {
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray arrays = jsonObject.getJSONArray("nodes_contact");
-                    Data.nodesContactList.clear();
+                    Data.nodesContactTableList.clear();
                     for (int i = 0; i < arrays.length(); i++) {
-                        NodesContact nodesContact = new NodesContact();
+                        NodesContactTable nodesContact = new NodesContactTable();
                         JSONObject object = arrays.getJSONObject(i);
                         nodesContact.setN1(object.getInt("n1"));
                         nodesContact.setPid(object.getInt("pid"));
                         nodesContact.setN2(object.getInt("n2"));
                         nodesContact.setFn(object.getInt("fn"));
                         nodesContact.setId(object.getInt("id"));
-                        Data.nodesContactList.add(nodesContact);
+                        Data.nodesContactTableList.add(nodesContact);
                     }
-                    Log.e(TAG, "NodesContact number : " + Data.nodesContactList.size());
+                    Log.e(TAG, "NodesContact number : " + Data.nodesContactTableList.size());
                 } catch (Exception e) {
                     Log.e(TAG, "解析nodesContactList列表时出错" + e.toString());
                     e.printStackTrace();

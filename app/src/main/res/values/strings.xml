@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Navigation Application</string>
+    <string name="app_name">驻足</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -16,8 +16,11 @@
 
     <string name="hello_world">Hello world!</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="queryHint">搜索</string>
     <string name="title_activity_introduction">IntroductionActivity</string>
+
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
