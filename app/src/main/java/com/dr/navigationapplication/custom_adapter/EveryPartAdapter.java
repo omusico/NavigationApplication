@@ -1,6 +1,9 @@
 package com.dr.navigationapplication.custom_adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -60,7 +63,14 @@ public class EveryPartAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        asyncImageLoader.loadImage(viewHolder.imageView, everyPartClassList.get(position).imageUrl);
+        viewHolder.imageView.setTag(everyPartClassList.get(position).imageUrl);
+        viewHolder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.user_photo_background));
+
+        Bitmap bitmap = asyncImageLoader.loadImage(viewHolder.imageView, everyPartClassList.get(position).imageUrl);
+        if (bitmap != null) {
+            Drawable drawable = new BitmapDrawable(null, bitmap);
+            viewHolder.imageView.setBackground(drawable);
+        }
         viewHolder.textView.setText(everyPartClassList.get(position).name);
         return convertView;
     }

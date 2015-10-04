@@ -40,11 +40,14 @@ import java.security.NoSuchAlgorithmException;
  *
  */
 public class AsyncImageLoader {
+
+    public static final String TAG = "AsyncTmageLoader: ";
+
     private Context context;
     // 内存缓存默认 5M
-    static final int MEM_CACHE_DEFAULT_SIZE = 15 * 1024 * 1024;
+    static final int MEM_CACHE_DEFAULT_SIZE = 5 * 1024 * 1024;
     // 文件缓存默认 10M
-    static final int DISK_CACHE_DEFAULT_SIZE = 30 * 1024 * 1024;
+    static final int DISK_CACHE_DEFAULT_SIZE = 50 * 1024 * 1024;
     // 一级内存缓存基于 LruCache
     private LruCache<String, Bitmap> memCache;
     // 二级文件缓存基于 DiskLruCache
@@ -84,6 +87,7 @@ public class AsyncImageLoader {
     private void initDiskLruCache() {
         try {
             File cacheDir = getDiskCacheDir(context, "bitmap");
+            Log.i(AsyncImageLoader.TAG, "cache dir :　" + cacheDir);
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
@@ -123,7 +127,9 @@ public class AsyncImageLoader {
             DiskLruCache.Snapshot snapShot = diskCache.get(key);
             if (snapShot != null) {
                 InputStream is = snapShot.getInputStream(0);
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+                Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
                 return bitmap;
             }
         } catch (IOException e) {
@@ -147,7 +153,7 @@ public class AsyncImageLoader {
                 // 先从内存中拿
                 Bitmap bitmap = getBitmapFromMem(imageUrl);
                 if (bitmap != null) {
-                    Log.i("AsyncImageLoader", "image exists in memory");
+                    Log.i(AsyncImageLoader.TAG, "image exists in memory");
                     final BitmapDrawable drawable = new BitmapDrawable(null, bitmap);
                     ReadyActivity.handler.post(new Runnable() {
                         @Override
@@ -160,7 +166,7 @@ public class AsyncImageLoader {
                 // 再从文件中找
                 bitmap = getBitmapFromDisk(imageUrl);
                 if (bitmap != null) {
-                    Log.i("AsyncImageLoader", "image exists in file");
+                    Log.i(AsyncImageLoader.TAG, "image exists in file");
                     final BitmapDrawable drawable = new BitmapDrawable(null, bitmap);
                     // 重新缓存到内存中
                     putBitmapToMem(imageUrl, bitmap);

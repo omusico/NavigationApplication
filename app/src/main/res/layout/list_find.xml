@@ -3,24 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card_background_white"
-    android:padding="16dp" >
+    android:padding="16dp">
 
 
     <ImageView
         android:id="@+id/activity_googlecards_card_imageview"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        />
+        android:layout_height="160dp" />
 
     <TextView
         android:id="@+id/activity_googlecards_card_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_below="@+id/activity_googlecards_card_imageview"
-        android:textSize="20sp"
-        android:text="哈哈"
         android:layout_centerHorizontal="true"
-        />
-
+        android:textStyle="italic"
+        android:textColor="@color/pale_black"
+        android:textSize="15sp" />
 </RelativeLayout>
 
