@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dr.navigationapplication.R;
-import com.dr.navigationapplication.dao.daoimpl.Data;
+import com.indoor.parse.Data;
 import com.dr.navigationapplication.fragment.FindFragment;
 import com.dr.navigationapplication.fragment.MapFragment;
 import com.dr.navigationapplication.fragment.NavigationDrawerFragment;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         if (BaiduLocate.getCurrentCity() != null) {
             mTitle = BaiduLocate.getCurrentCity();
             for (int i = 0; i < Data.cityTableList.size(); i++) {
-                Log.i(TAG, mTitle + "==" + Data.cityTableList.get(i).getName());
+                Log.i(TAG, mTitle + "==" + Data.cityTableList.get(i));
                 if (mTitle.equals(Data.cityTableList.get(i).getName())) {
                     findFragment.setCityID(Data.cityTableList.get(i).getId());
                     Log.i(TAG, "开始更新");

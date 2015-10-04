@@ -62,7 +62,7 @@
 
             </com.dr.navigationapplication.custom_view.MyGridView>
             <Button
-                android:id="@+id/activity_every_part_button"
+                android:id="@+id/activity_every_part_position_button"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -16,8 +16,10 @@ import android.widget.TextView;
 import com.dr.navigationapplication.R;
 import com.dr.navigationapplication.custom_adapter.EveryPartAdapter;
 import com.dr.navigationapplication.custom_view.MyGridView;
-import com.dr.navigationapplication.dao.daoimpl.Data;
+import com.indoor.parse.Data;
 import com.dr.navigationapplication.util.PlacePhotoDownloadTask;
+import com.onlylemi.indoor.IndoorActivity;
+import com.onlylemi.indoor.TestActivity;
 
 
 /**
@@ -84,11 +86,11 @@ public class EveryPartActivity extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.activity_every_part_button);
+        button = (Button) findViewById(R.id.activity_every_part_position_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent().setClass(EveryPartActivity.this, TestActivity.class));
             }
         });
 

@@ -23,7 +23,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.dr.navigationapplication.R;
-import com.dr.navigationapplication.dao.daoimpl.Data;
+import com.indoor.parse.Data;
 
 import java.util.ArrayList;
 

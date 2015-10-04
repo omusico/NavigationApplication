@@ -20,10 +20,10 @@ import android.widget.TextView;
 
 import com.dr.navigationapplication.R;
 import com.dr.navigationapplication.activity.EveryPartActivity;
-import com.dr.navigationapplication.dao.PlaceTable;
-import com.dr.navigationapplication.dao.daoimpl.Data;
+import com.indoor.parse.Data;
 import com.dr.navigationapplication.listViewAnimation.ScaleInAnimationAdapter;
 import com.dr.navigationapplication.util.AsyncImageLoader;
+import com.indoor.parse.info.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public class FindFragment extends Fragment {
                 String s = myAdapter.placeTables.get(position).getImage();
                 intent.putExtra("PlaceID", pid);
                 intent.putExtra("MainPlace", s);
-                intent.putExtra("name",myAdapter.placeTables.get(position).getName());
+                intent.putExtra("name", myAdapter.placeTables.get(position).getName());
                 intent.putExtra("intro", myAdapter.placeTables.get(position).getIntro());
                 startActivity(intent);
             }

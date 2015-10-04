@@ -30,9 +30,9 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.dr.navigationapplication.R;
-import com.dr.navigationapplication.dao.PlaceTable;
-import com.dr.navigationapplication.dao.daoimpl.Data;
+import com.indoor.parse.Data;
 import com.dr.navigationapplication.util.BaiduLocate;
+import com.indoor.parse.info.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -103,7 +103,7 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
         search.setOnGetGeoCodeResultListener(this);//设置搜索监听
         if (initLocation()) {
             initPlace();
-        }else {
+        } else {
             Toast.makeText(mContext, "初始化定位失败， 请手动选择城市 ", Toast.LENGTH_LONG).show();
         }
         return view;
@@ -118,7 +118,7 @@ public class MapFragment extends Fragment implements BaiduMap.OnMarkerClickListe
             if (placeTable.getCid() == cid) {
                 LatLng latLng = new LatLng(placeTable.getLat(), placeTable.getLng());
                 OverlayOptions options = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.position_buildingtwo));
+                        .fromResource(R.mipmap.position_buildingone));
                 Marker marker = (Marker) baiduMap.addOverlay(options);
                 mapMarker.put(marker, placeTable);
                 Log.i(TAG, "palcetable :  " + placeTable.toString());
